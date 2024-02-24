@@ -42,7 +42,7 @@ DEF LAMP Solid {
   ]
 }
 DEF ROBOT Robot {
-  translation -0.494902 -0.173668 -4.62346e-05
+  translation -0.301779 0.15527 -4.62346e-05
   rotation -0.16229399938839506 -0.3114499988263007 0.9363009964715497 0.0924729
   children [
     Pen {
@@ -100,7 +100,7 @@ DEF ROBOT Robot {
         }
       ]
       endPoint Solid {
-        translation 0 0.044999999999999686 0.025
+        translation 0 0.044999999999999644 0.025
         rotation -0.060503442670802474 0.06050349746974234 0.9963326052172085 4.708714125280549
         children [
           DEF WHEEL Pose {
@@ -251,7 +251,7 @@ DEF ROBOT Robot {
     density -1
     mass 0.5
   }
-  controller "light_sensor"
+  controller "light_sensor_v3a"
 }
 TexturedBackgroundLight {
 }

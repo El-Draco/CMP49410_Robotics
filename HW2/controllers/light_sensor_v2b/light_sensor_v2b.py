@@ -45,9 +45,9 @@ class Controller(Robot):
             ls1_value = self.ls1.getValue()
             #print("left " + str(ls0_value))
             #print("right " + str(ls1_value))
-            left_speed = (1024 - ls0_value) / 100.0
+            left_speed = (ls1_value) / 100.0
             left_speed = left_speed if left_speed < MAX_SPEED else MAX_SPEED
-            right_speed = (1024 - ls1_value) / 100.0
+            right_speed = (ls0_value) / 100.0
             right_speed = right_speed if right_speed < MAX_SPEED else MAX_SPEED
             # Set the motor speeds
             self.left_motor.setVelocity(left_speed)
