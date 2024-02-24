@@ -35,13 +35,11 @@ class Controller(Robot):
         self.right_motor.setPosition(float('inf'))
         self.left_motor.setVelocity(0.5)
         self.right_motor.setVelocity(-0.5)
-        self.pen = self.getDevice('pen')
 
     def run(self):
         MAX_SPEED = 10
         print('Move the light (shift + drag mouse), the robot should follow it.')
         print('v3')
-        self.pen.write(False)
         while self.step(self.timeStep) != -1:
             # read sensor values
             ls0_value = self.ls0.getValue()
