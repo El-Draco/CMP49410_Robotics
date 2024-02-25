@@ -20,15 +20,19 @@ from controller import Robot
 import random
 
 class Controller(Robot):
-    timeStep = 64
+    timeStep = 32
 
     def __init__(self):
         super(Controller, self).__init__()
         # get a handler to the distance sensors.
-        self.ls0 = self.getDevice('ls0')
-        self.ls1 = self.getDevice('ls1')
-        self.ls0.enable(self.timeStep)
-        self.ls1.enable(self.timeStep)
+        self.ls0g = self.getDevice('ls0_green')
+        self.ls1g = self.getDevice('ls1_green')
+        self.ls0r = self.getDevice('ls0_red')
+        self.ls1r = self.getDevice('ls1_red')
+        self.ls0g.enable(self.timeStep)
+        self.ls1g.enable(self.timeStep)
+        self.ls0r.enable(self.timeStep)
+        self.ls1r.enable(self.timeStep)
         self.left_motor = self.getDevice('left wheel motor')
         self.right_motor = self.getDevice('right wheel motor')
         self.left_motor.setPosition(float('inf'))
@@ -41,13 +45,17 @@ class Controller(Robot):
         print('Move the light (shift + drag mouse), the robot should follow it.')
         while self.step(self.timeStep) != -1:
             # read sensor values
-            ls0_value = self.ls0.getValue()
-            ls1_value = self.ls1.getValue()
-            #print("left " + str(ls0_value))
-            #print("right " + str(ls1_value))
-            left_speed = (1024 - ls0_value) / 100.0
+            ls0g_value = self.ls0g.getValue()
+            ls1g_value = self.ls1g.getValue()
+            ls0r_value = self.ls0r.getValue()
+            ls1r_value = self.ls1r.getValue()
+            #print("left " + str(ls0r_value))
+            #print("right " + str(ls1g_value))
+            #print(ls0r_value)
+            #print(ls0r_value)
+            left_speed = ((1024 - ls0g_value - 85) + (ls1r_value - 85)) / 100.0
             left_speed = left_speed if left_speed < MAX_SPEED else MAX_SPEED
-            right_speed = (1024 - ls1_value) / 100.0
+            right_speed = ((1024 - ls1g_value - 85) + (ls0r_value  - 85)) / 100.0
             right_speed = right_speed if right_speed < MAX_SPEED else MAX_SPEED
             # Set the motor speeds
             self.left_motor.setVelocity(left_speed)
