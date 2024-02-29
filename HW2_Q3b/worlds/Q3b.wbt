@@ -1,0 +1,497 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+
+WorldInfo {
+  info [
+    "Example use of a LightSensor device."
+  ]
+  title "Light Sensor"
+  basicTimeStep 8
+}
+Viewpoint {
+  orientation 0.27506846570536825 0.38906762619743607 -0.879183553883708 1.3627570458620857
+  position -0.9543106120140732 2.444164982648106 1.8392631294516932
+}
+TexturedBackground {
+}
+RectangleArena {
+  floorSize 2 2
+  floorTileSize 2 2
+}
+DEF ROBOT_G Robot {
+  translation 0.327527 -0.376329 -4.62346e-05
+  rotation -0.018285608989624332 -0.0007907993887750981 0.9998324915405606 2.18112
+  children [
+    DEF GREEN_LAMP Solid {
+      translation 0 0 0.1
+      rotation 0 0 1 -1.570795
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.8 0.8 0.8
+            roughness 1
+            metalness 0
+            emissiveColor 1 1 1
+          }
+          geometry Sphere {
+            radius 0.01
+          }
+        }
+        PointLight {
+          attenuation 0 0 5
+          color 0 1 0
+        }
+      ]
+    }
+    Pen {
+      translation 0 0 0.001
+      children [
+        Pose {
+          translation 0 0 0.07
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 1 0.692371 0
+                roughness 0.3707939685999999
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.14
+                radius 0.004
+              }
+            }
+          ]
+        }
+      ]
+      inkColor 0 1 0
+      leadSize 0.01
+    }
+    Pose {
+      translation 0 0 0.0415
+      rotation 0 0 1 1.570796
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.0820075 0.364731 0.8
+            roughness 1
+            metalness 0
+          }
+          geometry DEF BODY Cylinder {
+            height 0.08
+            radius 0.045
+          }
+        }
+      ]
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 6.434162111169219
+        axis 0 1 0
+        anchor 0 0 0.025
+      }
+      device [
+        RotationalMotor {
+          name "left wheel motor"
+          consumptionFactor 70
+        }
+        PositionSensor {
+          name "left wheel sensor"
+        }
+      ]
+      endPoint Solid {
+        translation 0 0.04499999999999848 0.025
+        rotation -0.060503442670802356 0.060503497469742144 0.9963326052172085 4.708714125280549
+        children [
+          DEF WHEEL Pose {
+            rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  baseColor 1 0 0
+                  roughness 1
+                  metalness 0
+                }
+                geometry Cylinder {
+                  height 0.01
+                  radius 0.025
+                }
+              }
+            ]
+          }
+        ]
+        name "left wheel"
+        boundingObject USE WHEEL
+        physics DEF PHYSICS_WHEEL Physics {
+          density -1
+          mass 0.05
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 11.178210332353322
+        axis 0 1 0
+        anchor 0 0 0.025
+      }
+      device [
+        RotationalMotor {
+          name "right wheel motor"
+          consumptionFactor 70
+        }
+        PositionSensor {
+          name "right wheel sensor"
+        }
+      ]
+      endPoint Solid {
+        translation 0 -0.04500000000000001 0.025
+        rotation 0.5084077003886679 -0.5084076514133689 -0.6950131438827964 1.9268502647101746
+        children [
+          USE WHEEL
+        ]
+        name "right wheel"
+        boundingObject USE WHEEL
+        physics USE PHYSICS_WHEEL
+      }
+    }
+    Pose {
+      translation 0.0385 -0.02 0.063
+      rotation -0.726828171413359 -0.4856551145357015 -0.48565411453546564 -1.884582
+      children [
+        DEF UNUSED_EYE Group {
+          children [
+            Pose {
+              translation 0 0 1e-05
+              rotation 0 0 1 0.8
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.975691 0.981481 0.0252992
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 0.02 0.005 0.005
+                  }
+                }
+              ]
+            }
+            Pose {
+              rotation 0 0 1 -0.8
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.975691 0.981481 0.0252992
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 0.02 0.005 0.005
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+    Pose {
+      translation 0.0385 0.02 0.063
+      rotation -0.7268306455324123 0.4856527631523045 0.4856527631523045 -1.884578
+      children [
+        USE UNUSED_EYE
+      ]
+    }
+    LightSensor {
+      translation 0.042 0.02 0.08
+      rotation 0 0 1 0.49920500000000034
+      name "ls0_red"
+      lookupTable [
+        0 0 0
+        4 1024 0
+      ]
+      colorFilter 1 0 0
+    }
+    LightSensor {
+      translation 0.042 -0.02 0.08
+      rotation 0 0 1 -0.500795
+      name "ls1_red"
+      lookupTable [
+        0 0 0
+        4 1024 0
+      ]
+      colorFilter 1 0 0
+    }
+    DEF SMILE Pose {
+      translation 0.036 0 0.025
+      rotation 0.25056300542381216 -0.9351130202419243 -0.25056300542381216 1.637834
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.721569 0.290196 0.290196
+            roughness 1
+            metalness 0
+          }
+          geometry Cylinder {
+            height 0.018
+            radius 0.009
+            subdivision 3
+          }
+        }
+      ]
+    }
+  ]
+  name "MyBot"
+  boundingObject Pose {
+    translation 0 0 0.0415
+    rotation 0 0 1 1.570796
+    children [
+      USE BODY
+    ]
+  }
+  physics Physics {
+    density -1
+    mass 0.5
+  }
+  controller "light_sensor_red"
+}
+DEF ROBOT_R Robot {
+  translation -0.403812 0.53016 -4.62346e-05
+  rotation -0.004148001849357399 -0.04718732103813462 -0.9988774453424712 0.699533
+  children [
+    DEF RED_LAMP Solid {
+      translation 0 0 0.1
+      rotation 0 0 1 -1.570795
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.8 0.8 0.8
+            roughness 1
+            metalness 0
+            emissiveColor 1 1 1
+          }
+          geometry Sphere {
+            radius 0.01
+          }
+        }
+        PointLight {
+          attenuation 0 0 5
+          color 1 0 0
+        }
+      ]
+    }
+    Pen {
+      translation 0 0 0.001
+      children [
+        Pose {
+          translation 0 0 0.07
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 1 0.692371 0
+                roughness 0.3707939685999999
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.14
+                radius 0.004
+              }
+            }
+          ]
+        }
+      ]
+      inkColor 1 0 0
+      leadSize 0.01
+    }
+    Pose {
+      translation 0 0 0.0415
+      rotation 0 0 1 1.570796
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.0820075 0.364731 0.8
+            roughness 1
+            metalness 0
+          }
+          geometry DEF BODY Cylinder {
+            height 0.08
+            radius 0.045
+          }
+        }
+      ]
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 6.434162111169219
+        axis 0 1 0
+        anchor 0 0 0.025
+      }
+      device [
+        RotationalMotor {
+          name "left wheel motor"
+          consumptionFactor 70
+        }
+        PositionSensor {
+          name "left wheel sensor"
+        }
+      ]
+      endPoint Solid {
+        translation 0 0.04499999999999848 0.025
+        rotation -0.060503442670802356 0.060503497469742144 0.9963326052172085 4.708714125280549
+        children [
+          DEF WHEEL Pose {
+            rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  baseColor 1 0 0
+                  roughness 1
+                  metalness 0
+                }
+                geometry Cylinder {
+                  height 0.01
+                  radius 0.025
+                }
+              }
+            ]
+          }
+        ]
+        name "left wheel"
+        boundingObject USE WHEEL
+        physics DEF PHYSICS_WHEEL Physics {
+          density -1
+          mass 0.05
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 11.178210332353322
+        axis 0 1 0
+        anchor 0 0 0.025
+      }
+      device [
+        RotationalMotor {
+          name "right wheel motor"
+          consumptionFactor 70
+        }
+        PositionSensor {
+          name "right wheel sensor"
+        }
+      ]
+      endPoint Solid {
+        translation 0 -0.04500000000000001 0.025
+        rotation 0.5084077003886679 -0.5084076514133689 -0.6950131438827964 1.9268502647101746
+        children [
+          USE WHEEL
+        ]
+        name "right wheel"
+        boundingObject USE WHEEL
+        physics USE PHYSICS_WHEEL
+      }
+    }
+    Pose {
+      translation 0.0385 -0.02 0.063
+      rotation -0.726828171413359 -0.4856551145357015 -0.48565411453546564 -1.884582
+      children [
+        DEF UNUSED_EYE Group {
+          children [
+            Pose {
+              translation 0 0 1e-05
+              rotation 0 0 1 0.8
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.975691 0.981481 0.0252992
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 0.02 0.005 0.005
+                  }
+                }
+              ]
+            }
+            Pose {
+              rotation 0 0 1 -0.8
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.975691 0.981481 0.0252992
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 0.02 0.005 0.005
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+    Pose {
+      translation 0.0385 0.02 0.063
+      rotation -0.7268306455324123 0.4856527631523045 0.4856527631523045 -1.884578
+      children [
+        USE UNUSED_EYE
+      ]
+    }
+    LightSensor {
+      translation 0.042 0.02 0.08
+      rotation 0 0 -1 -0.499205
+      name "ls0_green"
+      lookupTable [
+        0 0 0
+        4 1024 0
+      ]
+      colorFilter 0 1 0
+    }
+    LightSensor {
+      translation 0.042 -0.02 0.08
+      rotation 0 0 1 -0.500795
+      name "ls1_green"
+      lookupTable [
+        0 0 0
+        4 1024 0
+      ]
+      colorFilter 0 1 0
+    }
+    DEF SMILE Pose {
+      translation 0.036 0 0.025
+      rotation 0.25056300542381216 -0.9351130202419243 -0.25056300542381216 1.637834
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.721569 0.290196 0.290196
+            roughness 1
+            metalness 0
+          }
+          geometry Cylinder {
+            height 0.018
+            radius 0.009
+            subdivision 3
+          }
+        }
+      ]
+    }
+  ]
+  name "MyBot(1)"
+  boundingObject Pose {
+    translation 0 0 0.0415
+    rotation 0 0 1 1.570796
+    children [
+      USE BODY
+    ]
+  }
+  physics Physics {
+    density -1
+    mass 0.5
+  }
+  controller "light_sensor_green"
+}
+TexturedBackgroundLight {
+}

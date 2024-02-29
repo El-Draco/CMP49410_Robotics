@@ -12,8 +12,8 @@ WorldInfo {
   basicTimeStep 8
 }
 Viewpoint {
-  orientation 0.3392122011497258 -0.0034155867479420043 -0.9407036814844116 3.1672414927194397
-  position 2.3372993489339895 -0.0394130032176383 2.0706508078086854
+  orientation 0.30488066448440004 0.0018154911046163243 -0.9523888304760821 3.137710135100874
+  position 2.6051731026420937 -0.006373945264865864 1.8210715541042275
 }
 TexturedBackground {
 }
@@ -22,7 +22,7 @@ RectangleArena {
   floorTileSize 2 2
 }
 DEF GREEN_LAMP Solid {
-  translation -0.208124 0.0341516 0.095
+  translation 0.477355 -0.463111 0.095
   rotation 0 0 1 -1.570795
   children [
     Shape {
@@ -43,7 +43,7 @@ DEF GREEN_LAMP Solid {
   ]
 }
 DEF RED_LAMP Solid {
-  translation 0.528254 -0.496949 0.095
+  translation 0.121557 0.324107 0.095
   rotation 0 0 1 -1.570795
   children [
     Shape {
@@ -123,7 +123,7 @@ DEF ROBOT Robot {
         }
       ]
       endPoint Solid {
-        translation 0 0.04499999999999906 0.025
+        translation 0 0.04499999999999831 0.025
         rotation -0.060503442670802356 0.060503497469742144 0.9963326052172085 4.708714125280549
         children [
           DEF WHEEL Pose {
@@ -168,7 +168,7 @@ DEF ROBOT Robot {
       ]
       endPoint Solid {
         translation 0 -0.04500000000000001 0.025
-        rotation 0.5084077003886678 -0.508407651413369 -0.6950131438827967 1.9268502647101748
+        rotation 0.5084077003886679 -0.5084076514133689 -0.6950131438827964 1.9268502647101746
         children [
           USE WHEEL
         ]
@@ -231,7 +231,7 @@ DEF ROBOT Robot {
       name "ls0_green"
       lookupTable [
         0 0 0
-        4 1024 0
+        2 1024 0
       ]
       colorFilter 0 1 0
     }
@@ -241,7 +241,7 @@ DEF ROBOT Robot {
       name "ls0_red"
       lookupTable [
         0 0 0
-        4 1024 0
+        2 1024 0
       ]
       colorFilter 1 0 0
     }
@@ -251,7 +251,7 @@ DEF ROBOT Robot {
       name "ls1_green"
       lookupTable [
         0 0 0
-        4 1024 0
+        2 1024 0
       ]
       colorFilter 0 1 0
     }
@@ -261,7 +261,7 @@ DEF ROBOT Robot {
       name "ls1_red"
       lookupTable [
         0 0 0
-        4 1024 0
+        2 1024 0
       ]
       colorFilter 1 0 0
     }

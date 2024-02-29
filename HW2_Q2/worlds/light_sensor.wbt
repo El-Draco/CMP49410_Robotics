@@ -13,7 +13,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.4454689953393575 0.0019621901777506475 0.8952952161164773 3.1285998625997427
-  position 1.9995539511641134 0.04514491934782501 2.5205723093124934
+  position 1.9864875747178188 -0.0385703450992886 2.5294135975842744
 }
 TexturedBackground {
 }
@@ -22,7 +22,7 @@ RectangleArena {
   floorTileSize 2 2
 }
 DEF LAMP Solid {
-  translation 0.5155 0.309284 0.095
+  translation 0 -0.1 0.095
   rotation 0 0 1 -1.570795
   children [
     Shape {
@@ -37,13 +37,13 @@ DEF LAMP Solid {
       }
     }
     PointLight {
-      attenuation 0 0 5
+      attenuation 0 0 12.56
     }
   ]
 }
 DEF ROBOT Robot {
-  translation -0.494902 -0.173668 -4.62346e-05
-  rotation -0.16229399938839506 -0.3114499988263007 0.9363009964715497 0.0924729
+  translation -0.728752 0.723839 -4.62346e-05
+  rotation 0 0 1 -1.61994
   children [
     Pen {
       translation 0 0 0.001
@@ -100,7 +100,7 @@ DEF ROBOT Robot {
         }
       ]
       endPoint Solid {
-        translation 0 0.044999999999999686 0.025
+        translation 0 0.04499999999999959 0.025
         rotation -0.060503442670802474 0.06050349746974234 0.9963326052172085 4.708714125280549
         children [
           DEF WHEEL Pose {
