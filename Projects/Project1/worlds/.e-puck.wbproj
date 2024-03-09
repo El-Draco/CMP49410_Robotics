@@ -6,6 +6,5 @@ maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
 textFiles: 0 "controllers/e-puck/e-puck.py"
-robotWindow: e-puck
 consoles: Console:All:All
 renderingDevicePerspectives: e-puck:camera;0;1;0;0

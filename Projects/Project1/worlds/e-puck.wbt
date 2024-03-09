@@ -13,8 +13,8 @@ WorldInfo {
   title "E-puck simulation"
 }
 Viewpoint {
-  orientation -0.2324493692067285 -0.14943881545798998 0.9610594836896971 3.9676615263416637
-  position 1.137825469469491 1.1910502463488248 0.9796653410178231
+  orientation -0.5865272800293734 -0.5693192311588067 0.576074094899337 4.059030084074192
+  position -0.1563305911396711 -0.44383160461569804 4.6048129164075124
   follow "e-puck"
 }
 TexturedBackground {
@@ -25,7 +25,7 @@ RectangleArena {
   floorSize 2 2
 }
 WoodenBox {
-  translation -0.683174 0.2 0.05
+  translation -0.120736 0.132435 0.05
   rotation 0 0 1 0.5
   size 0.1 0.1 0.1
 }
@@ -42,7 +42,7 @@ WoodenBox {
   size 0.1 0.1 0.1
 }
 WoodenBox {
-  translation 0.36 0.3 0.05
+  translation 0.0453543 0.129909 0.05
   rotation 0 0 1 5.36782
   name "wooden box(3)"
   size 0.1 0.1 0.1
@@ -54,6 +54,11 @@ WoodenBox {
   size 0.1 0.1 0.1
 }
 E-puck {
-  rotation 0 0 1 1.57
+  translation -1.7815871199582342e-11 1.605172890263359e-14 -6.3914548761956e-05
+  rotation 5.958418100688829e-08 5.9536626921663835e-08 0.9999999999999964 1.570000003611989
   controller "e-puck"
+  turretSlot [
+    GPS {
+    }
+  ]
 }
