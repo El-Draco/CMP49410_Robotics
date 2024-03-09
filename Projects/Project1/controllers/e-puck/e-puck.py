@@ -29,12 +29,12 @@ class Controller(Robot):
 
         self.ps0 = self.getDevice('ps0')
         self.ps1 = self.getDevice('ps1')
+        self.pen = self.getDevice('pen')
         self.ps0.enable(self.timeStep)
         self.ps1.enable(self.timeStep)
 
         self.gps = self.getDevice('gps')
         self.gps.enable(self.timeStep)
-
 
         # Get a handler to the motors and set target position to infinity (speed control).
         self.left_motor = self.getDevice('left wheel motor')
@@ -51,6 +51,7 @@ class Controller(Robot):
     def run(self):
         print("Press 'G' to read the GPS device's position")
         print("Press 'V' to read the GPS device's speed vector")
+        self.pen.write(True)
         while self.step(self.timeStep) != -1:
             key = chr(self.keyboard.getKey() & 0xff)
             if key == 'G':

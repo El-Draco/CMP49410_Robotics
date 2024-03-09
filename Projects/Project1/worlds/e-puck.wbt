@@ -13,8 +13,8 @@ WorldInfo {
   title "E-puck simulation"
 }
 Viewpoint {
-  orientation -0.5865272800293734 -0.5693192311588067 0.576074094899337 4.059030084074192
-  position -0.1563305911396711 -0.44383160461569804 4.6048129164075124
+  orientation -0.20145309733684055 0.021405771938976702 0.9792642352813106 2.802539811087973
+  position 2.5702493453899797 -0.7829304362609014 1.232069152805036
   follow "e-puck"
 }
 TexturedBackground {
@@ -23,14 +23,17 @@ TexturedBackgroundLight {
 }
 RectangleArena {
   floorSize 2 2
+  floorTileSize 2 2
+  floorAppearance PBRAppearance {
+  }
 }
 WoodenBox {
-  translation -0.120736 0.132435 0.05
+  translation 0.368425 -0.481413 0.05
   rotation 0 0 1 0.5
   size 0.1 0.1 0.1
 }
 WoodenBox {
-  translation 0.35 0.75 0.05
+  translation 0.602307 0.27624 0.05
   rotation 0 0 1 4.96782
   name "wooden box(1)"
   size 0.1 0.1 0.1
@@ -42,7 +45,7 @@ WoodenBox {
   size 0.1 0.1 0.1
 }
 WoodenBox {
-  translation 0.0453543 0.129909 0.05
+  translation 0.2232 0.235867 0.05
   rotation 0 0 1 5.36782
   name "wooden box(3)"
   size 0.1 0.1 0.1
@@ -54,10 +57,38 @@ WoodenBox {
   size 0.1 0.1 0.1
 }
 E-puck {
-  translation -1.7815871199582342e-11 1.605172890263359e-14 -6.3914548761956e-05
-  rotation 5.958418100688829e-08 5.9536626921663835e-08 0.9999999999999964 1.570000003611989
+  hidden position_0_0 93.74958016819501
+  hidden position_0_1 93.74958016529615
+  hidden translation_1 0 0.025999999999999926 0.02
+  hidden rotation_1 0 -1 0 1.8392731356075294
+  hidden translation_2 0 -0.025999999999999926 0.02
+  hidden rotation_2 0 -1 0 1.8392731252739927
+  translation 0.0828433 -0.061754 -6.3955e-05
+  rotation 0.0004255923709733864 0.003027708399844708 -0.9999953259155661 0.2793037076769447
   controller "e-puck"
   turretSlot [
+    Pen {
+      translation 0 0 -0.02
+      children [
+        Pose {
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 1 0.692371 0
+                roughness 0.3707939685999999
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.05
+                radius 0.005
+              }
+            }
+          ]
+        }
+      ]
+      inkColor 1 0 0
+      leadSize 0.01
+    }
     GPS {
     }
   ]
