@@ -17,9 +17,10 @@
 """
 
 from controller import Robot
+import math
 
 MAX_SPEED = 6.28
-
+GOAL = [-0.35471, -0.5]
 class Controller(Robot):
     SPEED = 6
     timeStep = 64
@@ -60,38 +61,14 @@ class Controller(Robot):
             elif key == 'V':
                 speed_vector_values = self.gps.getSpeedVector()
                 print(f'GPS speed vector: {speed_vector_values[0]} {speed_vector_values[1]} {speed_vector_values[2]}')
-
-            ps0_value = self.ps0.getValue()
-            ps1_value = self.ps1.getValue()
-            if ps1_value > 500:
-                # If both distance sensors are detecting something, this means that
-                # we are facing a wall. In this case we need to move backwards.
-                if ps0_value > 200:
-                    left_speed = -self.SPEED / 2
-                    right_speed = -self.SPEED
-                else:
-                    # we turn proportionnaly to the sensors value because the
-                    # closer we are from the wall, the more we need to turn.
-                    left_speed = -ps1_value / 100
-                    right_speed = (ps0_value / 100) + 0.5
-            elif ps0_value > 500:
-                left_speed = (ps1_value / 100) + 0.5
-                right_speed = -ps0_value / 100
-            else:  # if nothing was detected we can move forward at maximal speed.
-                left_speed = self.SPEED
-                right_speed = self.SPEED
-
-            if left_speed > MAX_SPEED:
-                left_speed = MAX_SPEED
-            if right_speed > MAX_SPEED:
-                right_speed = MAX_SPEED
-            if left_speed < -MAX_SPEED:
-                left_speed = -MAX_SPEED
-            if right_speed < -MAX_SPEED:
-                right_speed = -MAX_SPEED
-                
-            self.left_motor.setVelocity(left_speed)
-            self.right_motor.setVelocity(right_speed)
+            
+            gps_values = self.gps.getValues()
+            dist = math.sqrt( pow(gps_values[0] - GOAL[0], 2) + pow(gps_values[1] - GOAL[1],2))
+            speed = dist * math.sqrt(2) * 0.74
+            if (speed > MAX_SPEED):
+                speed = MAX_SPEED  
+            self.left_motor.setVelocity(dist)
+            self.right_motor.setVelocity(dist)
 
 
 controller = Controller()
