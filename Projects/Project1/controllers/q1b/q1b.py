@@ -20,7 +20,8 @@ from controller import Robot
 import math
 
 MAX_SPEED = 6.28
-GOAL = [-0.35471, -0.5]
+GOAL = [-0.35471, -0.35471]
+
 class Controller(Robot):
     SPEED = 6
     timeStep = 64
