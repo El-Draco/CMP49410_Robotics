@@ -30,10 +30,10 @@ class Controller(Robot):
         super(Controller, self).__init__()
 
         self.ps0 = self.getDevice('ps0')
-        self.ps1 = self.getDevice('ps1')
+        self.ps7 = self.getDevice('ps7')
         self.pen = self.getDevice('pen')
         self.ps0.enable(self.timeStep)
-        self.ps1.enable(self.timeStep)
+        self.ps7.enable(self.timeStep)
 
         self.gps = self.getDevice('gps')
         self.gps.enable(self.timeStep)
@@ -50,13 +50,16 @@ class Controller(Robot):
         self.keyboard = self.getKeyboard()
         self.keyboard.enable(self.timeStep)
 
+    def follow_goal(self):
+        return GOAL
 
-    def turn_towards_goal(self):
+
+    def move_to_result(self, resultant_x, resultant_y):
         # Get the current GPS coordinates
         gps_values = self.gps.getValues()
 
         # Calculate the angle between the current orientation and the direction to the goal
-        angle_to_goal = math.atan2(GOAL[1] - gps_values[1], GOAL[0] - gps_values[0])
+        angle_to_goal = math.atan2(resultant_y - gps_values[1], resultant_x - gps_values[0])
 
         # Get the current velocity vector
         current_velocity = self.gps.getSpeedVector()
@@ -90,6 +93,15 @@ class Controller(Robot):
         self.left_motor.setVelocity(left_velocity)
         self.right_motor.setVelocity(right_velocity)
 
+    def avoid_barrels(self):
+        ps0_value = self.ps0.getValue()        
+        ps7_value = self.ps7.getValue()
+
+        left_force = ps0_value
+        right_force = ps7_value
+
+        return left_force, right_force
+
     def run(self):
         print("Press 'G' to read the GPS device's position")
         print("Press 'V' to read the GPS device's speed vector")
@@ -103,16 +115,16 @@ class Controller(Robot):
                 speed_vector_values = self.gps.getSpeedVector()
                 print(f'GPS speed vector: {speed_vector_values[0]} {speed_vector_values[1]} {speed_vector_values[2]}')
             
-            gps_values = self.gps.getValues()
-            dist = math.sqrt( pow(gps_values[0] - GOAL[0], 2) + pow(gps_values[1] - GOAL[1],2))
-            
-            speed = dist * math.sqrt(2) * 0.74
-            if (speed > MAX_SPEED):
-                speed = MAX_SPEED  
-            
-            self.left_motor.setVelocity(speed)
-            self.right_motor.setVelocity(speed)
-            self.turn_towards_goal()
+            left_velocity, right_velocity = self.avoid_barrels()
+            self.left_motor.setVelocity(left_velocity / (4095/6.28))
+            self.right_motor.setVelocity(right_velocity / (4095/6.28))
+
+
+            # read all necessary sensors ==> follow goal, avoid obstacle, avoid wall
+            # feed sensors into apf model ==> combines all behaviors
+            # finally, feed resulting apf vector to move_to_result    
+            # X,y = self.compute_result()
+            # self.move_to_result(X, y)
 
 controller = Controller()
 controller.run()
