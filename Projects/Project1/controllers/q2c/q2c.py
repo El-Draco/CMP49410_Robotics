@@ -31,9 +31,15 @@ class Controller(Robot):
 
         self.ps0 = self.getDevice('ps0')
         self.ps7 = self.getDevice('ps7')
+        self.ps1 = self.getDevice('ps1')
+        self.ps6 = self.getDevice('ps6')
+        
         self.pen = self.getDevice('pen')
         self.ps0.enable(self.timeStep)
         self.ps7.enable(self.timeStep)
+        self.ps1.enable(self.timeStep)
+        self.ps6.enable(self.timeStep)
+        
 
         self.gps = self.getDevice('gps')
         self.gps.enable(self.timeStep)
@@ -96,11 +102,22 @@ class Controller(Robot):
     def avoid_barrels(self):
         ps0_value = self.ps0.getValue()        
         ps7_value = self.ps7.getValue()
+        ps1_value = self.ps1.getValue()
+        ps6_value = self.ps6.getValue()
+        
+        print(f'left_velocity = {ps0_value} and right velocity = {ps7_value}')
 
-        left_force = ps0_value
-        right_force = ps7_value
-
-        return left_force, right_force
+        #RIGHT SIDE OF ROBOT
+        if (ps0_value > 80 or ps1_value > 80) :
+            right_force = (max(ps0_value, ps1_value) / (4095/6.28))
+        else:
+            right_force = 3
+        #LEFT SIDE OF ROBOT
+        if (ps7_value > 80 or ps6_value > 80) :
+            left_force = (max(ps7_value, ps6_value) / (4095/6.28))
+        else:
+            left_force = 3
+        return right_force, left_force
 
     def run(self):
         print("Press 'G' to read the GPS device's position")
@@ -116,9 +133,10 @@ class Controller(Robot):
                 print(f'GPS speed vector: {speed_vector_values[0]} {speed_vector_values[1]} {speed_vector_values[2]}')
             
             left_velocity, right_velocity = self.avoid_barrels()
-            self.left_motor.setVelocity(left_velocity / (4095/6.28))
-            self.right_motor.setVelocity(right_velocity / (4095/6.28))
-
+            
+            
+            self.left_motor.setVelocity(left_velocity)
+            self.right_motor.setVelocity(right_velocity)
 
             # read all necessary sensors ==> follow goal, avoid obstacle, avoid wall
             # feed sensors into apf model ==> combines all behaviors
