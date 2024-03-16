@@ -13,8 +13,8 @@ WorldInfo {
   title "E-puck simulation"
 }
 Viewpoint {
-  orientation 0.016016531627622912 -0.9997750917148235 0.013900960442994372 4.945444454043937
-  position -0.5774508326248062 0.1137683261900756 2.441312308720901
+  orientation -0.5377254434020382 0.5228060512564112 0.6614568620006599 1.9488971343098689
+  position -0.04071916674064392 -0.6944926503544776 2.827383906533849
   follow "e-puck"
 }
 TexturedBackground {
@@ -28,12 +28,54 @@ RectangleArena {
   }
 }
 OilBarrel {
-  translation 0.346684 -0.365435 0.08
+  translation -0.27669 0.099228 0.08
   height 0.15
-  radius 0.111
+  radius 0.113
+}
+OilBarrel {
+  translation -0.10939 0.25095 0.08
+  name "oil barrel(1)"
+  height 0.15
+  radius 0.113
+}
+OilBarrel {
+  translation 0.109391 0.25095 0.08
+  name "oil barrel(2)"
+  height 0.15
+  radius 0.113
+}
+OilBarrel {
+  translation 0.366782 0.09652 0.08
+  name "oil barrel(3)"
+  height 0.15
+  radius 0.113
+}
+OilBarrel {
+  translation 0.365894 -0.127882 0.08
+  name "oil barrel(4)"
+  height 0.15
+  radius 0.113
+}
+OilBarrel {
+  translation -0.27669 -0.13155 0.08
+  name "oil barrel(5)"
+  height 0.15
+  radius 0.113
+}
+OilBarrel {
+  translation 0.366782 -0.36177 0.08
+  name "oil barrel(6)"
+  height 0.15
+  radius 0.113
+}
+OilBarrel {
+  translation 0.57555 -0.246666 0.08
+  name "oil barrel(7)"
+  height 0.15
+  radius 0.113
 }
 E-puck {
-  translation 0.0316865 -0.214235 -3.15944e-05
+  translation -0.533221 -0.0982218 -3.15944e-05
   rotation -0.0011747799988378461 0.0007885869992198883 0.9999989990107485 -0.658755307179586
   controller "q2c"
   turretSlot [
