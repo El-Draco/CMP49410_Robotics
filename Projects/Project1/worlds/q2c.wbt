@@ -1,0 +1,65 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/obstacles/protos/OilBarrel.proto"
+
+WorldInfo {
+  info [
+    "The model of the E-puck robot"
+  ]
+  title "E-puck simulation"
+}
+Viewpoint {
+  orientation -0.348216810590831 -0.3428258656752053 0.8724766350143683 4.487738439791369
+  position -0.07499527223578364 2.3105495141307815 2.396093996466225
+  follow "e-puck"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 1.48 1.48
+  floorTileSize 1.48 1.48
+  floorAppearance PBRAppearance {
+  }
+}
+OilBarrel {
+  translation 0.346684 -0.365435 0.08
+  height 0.15
+  radius 0.111
+}
+E-puck {
+  translation 0.38546 0.364013 -3.15944e-05
+  rotation -0.0011747799988378461 0.0007885869992198883 0.9999989990107485 -0.658755307179586
+  controller "q1b"
+  turretSlot [
+    GPS {
+    }
+  ]
+  groundSensorsSlot [
+    Pen {
+      children [
+        Pose {
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 1 0.692371 0
+                roughness 0.3707939685999999
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.1
+                radius 0.005
+              }
+            }
+          ]
+        }
+      ]
+      inkColor 1 1 0
+    }
+  ]
+}
