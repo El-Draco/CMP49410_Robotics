@@ -79,7 +79,7 @@ class Controller(Robot):
         # Calculate the angle difference between the current orientation and the goal
         angle_difference = angle_to_goal - current_angle
         # Use proportional control to adjust the velocities
-        angular_velocity = 2 * angle_difference
+        angular_velocity = 6 * angle_difference
         # Calculate the adjusted velocities
         
         left_force = MAX_SPEED - angular_velocity
@@ -97,7 +97,7 @@ class Controller(Robot):
         # Set the adjusted velocities
         print(f'dist = {dist}')
         #if (math.fabs(dist - 0.01) < 0.01):
-        if dist < 0.1:
+        if dist < 0.14:
             left_force = 0
             right_force = 0
             print(dist)
@@ -166,7 +166,9 @@ class Controller(Robot):
 
         while self.step(self.timeStep) != -1:
             ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value, gps_values = self.read_values()
-            left_velocity, right_velocity = self.combine_APF(ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value, gps_values)           
+            left_velocity, right_velocity = self.combine_APF(ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value, gps_values)
+            # left_velocity = left_velocity**2
+            # right_velocity = right_velocity**2         
             if left_velocity > MAX_SPEED:
                 left_velocity = MAX_SPEED
             if right_velocity > MAX_SPEED:
