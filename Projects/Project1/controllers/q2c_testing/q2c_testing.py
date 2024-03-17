@@ -112,22 +112,29 @@ class Controller(Robot):
         ps2_value = self.ps2.getValue()
         ps5_value = self.ps5.getValue()
         
+        MAX_SV = 4095
+        MIN_SV = 34
+        MAX_SP = 6.28
+        MIN_SP = 3.14
+        
         print(f'left_reading = {ps7_value} and right_reading = {ps0_value}')
 
         #RIGHT SIDE OF ROBOT
-        if (ps0_value > 34 or ps1_value > 34 or ps2_value > 34) :
-            #right_sensor_value = (4095 - (max(ps0_value, ps1_value)) / (4095-34))
-            right_sensor_value = (max(ps0_value, ps1_value, ps2_value) - 34) / (4095 - 34)
-            right_force = (1 + (right_sensor_value * (6.28 - 1)))
+        if (ps0_value > MIN_SV or ps1_value > MIN_SV or ps2_value > MIN_SV) :
+            # Normalize sensor values:  Value - MIN / MAX - MIN
+            right_sensor_value = (max(ps0_value, ps1_value, ps2_value) - MIN_SV) / (MAX_SV - MIN_SV)
+            # Map sensor values to speed values: MIN + (norm_sensor * (MAX - MIN))
+            right_force = (MIN_SP + (right_sensor_value * (MAX_SP - MIN_SP)))
         else:
-            right_force = 1 
+            right_force = MIN_SP 
         #LEFT SIDE OF ROBOT
-        if (ps7_value > 34 or ps6_value > 34 or ps5_value > 34) :
-            #left_sensor_value = (4095 - (max(ps7_value, ps6_value)) / (4095-34))
-            left_sensor_value = (max(ps7_value, ps6_value, ps5_value) - 34) / (4095 - 34)
-            left_force = (1 + (left_sensor_value * (6.28 - 1)))
+        if (ps7_value > MIN_SV or ps6_value > MIN_SV or ps5_value > MIN_SV) :
+            # Normalize sensor values:  Value - MIN / MAX - MIN
+            left_sensor_value = (max(ps7_value, ps6_value, ps5_value) - MIN_SV) / (MAX_SV - MIN_SV)
+            # Map sensor values to speed values: MIN + (norm_sensor * (MAX - MIN))
+            left_force = (MIN_SP + (left_sensor_value * (MAX_SP - MIN_SP)))
         else:
-            left_force = 1
+            left_force = MIN_SP
             
         print(f'left_force = {left_force} and right_force = {right_force}')
         print("---------------------------------------------------------")
