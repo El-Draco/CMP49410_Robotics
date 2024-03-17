@@ -2,7 +2,7 @@ from controller import Robot
 import math
 
 MAX_SPEED = 6.28
-GOAL = [-0.35471, -0.35471]
+GOAL = [0.35471, 0.35471]
 
 class Controller(Robot):
     SPEED = 6
@@ -51,7 +51,7 @@ class Controller(Robot):
         # Compute Net Force by summing them:
         final_left_force = att_force_left + rep_force_left
         final_right_force = att_force_right + rep_force_right
-
+        #return rep_force_left, rep_force_right
         return final_left_force, final_right_force
     
     
@@ -101,14 +101,28 @@ class Controller(Robot):
         # print(f"ps7_value: {ps7_value}")
         # print("---------------------------------------------------------")
         
+        MAX_SV = 4095
+        MIN_SV = 34
+        MAX_SP = 6.28
+        MIN_SP = 3.14
         #RIGHT SIDE OF ROBOT
         if (ps0_value > 80 or ps1_value > 100 or ps2_value > 120) :
-            right_force = (max(ps0_value, ps1_value, ps2_value) / (4095/6.28))
+            right_sensor_value = (max(ps0_value, ps1_value, ps2_value) - MIN_SV) / (MAX_SV - MIN_SV)
+            # Map sensor values to speed values: MIN + (norm_sensor * (MAX - MIN))
+            right_force = (MIN_SP + (right_sensor_value * (MAX_SP - MIN_SP)))
+            #right_force = right_sensor_value / (4095/6.28)
+            #right_force = (max(ps0_value, ps1_value, ps2_value) / (4095/6.28))
         else:
             right_force = 0
         #LEFT SIDE OF ROBOT
         if (ps7_value > 80 or ps6_value > 100 or ps5_value > 120) :
-            left_force = (max(ps7_value, ps6_value, ps5_value) / (4095/6.28))
+                    # Normalize sensor values:  Value - MIN / MAX - MIN
+            left_sensor_value = (max(ps7_value, ps6_value, ps5_value) - MIN_SV) / (MAX_SV - MIN_SV)
+            # Map sensor values to speed values: MIN + (norm_sensor * (MAX - MIN))
+            left_force = (MIN_SP + (left_sensor_value * (MAX_SP - MIN_SP)))
+            #left_force = (max(ps7_value, ps6_value, ps5_value) / (4095/6.28))
+            #left_force = left_sensor_value / (4095/6.28)
+
         else:
             left_force = 0
         return left_force, right_force

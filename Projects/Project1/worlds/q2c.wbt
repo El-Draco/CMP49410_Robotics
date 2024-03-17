@@ -28,13 +28,13 @@ RectangleArena {
   }
 }
 OilBarrel {
-  translation -0.0482905 -0.023086 0.08
+  translation -0.34793 0.0261309 0.08
   height 0.15
   radius 0.111
 }
 E-puck {
-  translation 0.345447 0.517661 -3.15944e-05
-  rotation 0.000548539917141455 3.478059474629032e-05 -0.9999998489471233 1.96776
+  translation -0.485836 0.466981 -3.15944e-05
+  rotation 0.0009230774331439977 -0.0004576572147506465 -0.9999994692388223 0.920561
   controller "q2c_combined_v1"
   turretSlot [
     GPS {
