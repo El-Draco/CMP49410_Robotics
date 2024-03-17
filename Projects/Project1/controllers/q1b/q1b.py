@@ -29,6 +29,8 @@ class Controller(Robot):
         
         super(Controller, self).__init__()
 
+        # Get and enable the necessary devices
+        # In this case, only the front sensors are necessary since it is assumed there are no obstacles
         self.ps0 = self.getDevice('ps0')
         self.ps1 = self.getDevice('ps1')
         self.pen = self.getDevice('pen')
@@ -45,11 +47,6 @@ class Controller(Robot):
         self.right_motor.setPosition(float('inf'))
         self.left_motor.setVelocity(0.0)
         self.right_motor.setVelocity(0.0)
-        
-        
-        self.keyboard = self.getKeyboard()
-        self.keyboard.enable(self.timeStep)
-
 
     def turn_towards_goal(self):
         # Get the current GPS coordinates
@@ -82,7 +79,9 @@ class Controller(Robot):
             left_velocity = -MAX_SPEED
         if right_velocity < -MAX_SPEED:
             right_velocity = -MAX_SPEED
+
         # Set the adjusted velocities
+        # if the robot is within 0.01 m of the goal, stop
         if (math.fabs(dist - 0.01) < 0.01):
             left_velocity = 0
             right_velocity = 0
@@ -91,18 +90,9 @@ class Controller(Robot):
         self.right_motor.setVelocity(right_velocity)
 
     def run(self):
-        print("Press 'G' to read the GPS device's position")
-        print("Press 'V' to read the GPS device's speed vector")
         self.pen.write(True)
         while self.step(self.timeStep) != -1:
-            key = chr(self.keyboard.getKey() & 0xff)
-            if key == 'G':
-                gps_values = self.gps.getValues()
-                print(f'GPS position: {gps_values[0]} {gps_values[1]} {gps_values[2]}')
-            elif key == 'V':
-                speed_vector_values = self.gps.getSpeedVector()
-                print(f'GPS speed vector: {speed_vector_values[0]} {speed_vector_values[1]} {speed_vector_values[2]}')
-            
+          
             gps_values = self.gps.getValues()
             dist = math.sqrt( pow(gps_values[0] - GOAL[0], 2) + pow(gps_values[1] - GOAL[1],2))
             
