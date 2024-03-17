@@ -79,7 +79,7 @@ class Controller(Robot):
         # Calculate the angle difference between the current orientation and the goal
         angle_difference = angle_to_goal - current_angle
         # Use proportional control to adjust the velocities
-        angular_velocity = 6 * angle_difference
+        angular_velocity = 5 * angle_difference
         # Calculate the adjusted velocities
         
         left_force = MAX_SPEED - angular_velocity
