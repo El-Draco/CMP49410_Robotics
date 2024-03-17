@@ -39,18 +39,29 @@ class Controller(Robot):
         self.right_motor.setVelocity(0.0)
 
     def combine_APF(self, ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value, gps_values):
+        rep_coeff_l = 1
+        rep_coeff_r = 1
+        att_coeff_l = 1
+        att_coeff_r = 1
+
         # Call the indivudal APF models to retrieve left and right forces
         att_force_left, att_force_right = self.goal_APF(gps_values)
         rep_force_left, rep_force_right = self.obstacles_APF(ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value)
 
-        if rep_force_left > 0:
-            att_force_left = 0
-        if rep_force_right > 0:
-            att_force_right = 0
+        if att_force_left == 0 and att_force_right == 0:
+            return att_force_left, att_force_right
+          
+        if rep_force_left != 0 and att_force_left != 0:
+            att_coeff_l = 0.05
+        if rep_force_right != 0 and att_force_right != 0:
+            att_coeff_r = 0.05
 
+        print(f'rep_L = {rep_force_left} rep_R = {rep_force_right}')
+        print(f'att_L = {att_force_left} att_R = {att_force_right}')
+        print("---------------------------")
         # Compute Net Force by summing them:
-        final_left_force = att_force_left + rep_force_left
-        final_right_force = att_force_right + rep_force_right
+        final_left_force = att_force_left * att_coeff_l + rep_force_left * rep_coeff_l
+        final_right_force = att_force_right * att_coeff_r + rep_force_right * rep_coeff_r
         #return rep_force_left, rep_force_right
         return final_left_force, final_right_force
     
@@ -58,6 +69,7 @@ class Controller(Robot):
     def goal_APF(self, gps_values):
         # Compute the distance between robot and goal
         dist = math.sqrt( pow(gps_values[0] - GOAL[0], 2) + pow(gps_values[1] - GOAL[1],2))
+        
         # Calculate the angle between the current orientation and the direction to the goal
         angle_to_goal = math.atan2(GOAL[1] - gps_values[1], GOAL[0] - gps_values[0])
         # Get the current velocity vector
@@ -83,7 +95,9 @@ class Controller(Robot):
             right_force = -MAX_SPEED
 
         # Set the adjusted velocities
-        if (math.fabs(dist - 0.01) < 0.01):
+        print(f'dist = {dist}')
+        #if (math.fabs(dist - 0.01) < 0.01):
+        if dist < 0.1:
             left_force = 0
             right_force = 0
             print(dist)
@@ -93,13 +107,13 @@ class Controller(Robot):
 
     def obstacles_APF(self, ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value):
 
-        # print(f"ps0_value: {ps0_value}")
-        # print(f"ps1_value: {ps1_value}")
-        # print(f"ps2_value: {ps2_value}")
-        # print(f"ps5_value: {ps5_value}")
-        # print(f"ps6_value: {ps6_value}")
-        # print(f"ps7_value: {ps7_value}")
-        # print("---------------------------------------------------------")
+        print(f"ps0_value: {ps0_value}")
+        print(f"ps1_value: {ps1_value}")
+        print(f"ps2_value: {ps2_value}")
+        print(f"ps5_value: {ps5_value}")
+        print(f"ps6_value: {ps6_value}")
+        print(f"ps7_value: {ps7_value}")
+        print("---------------------------------------------------------")
         
         MAX_SV = 4095
         MIN_SV = 34
@@ -113,7 +127,7 @@ class Controller(Robot):
             #right_force = right_sensor_value / (4095/6.28)
             #right_force = (max(ps0_value, ps1_value, ps2_value) / (4095/6.28))
         else:
-            right_force = 0
+            right_force = 2
         #LEFT SIDE OF ROBOT
         if (ps7_value > 80 or ps6_value > 100 or ps5_value > 120) :
                     # Normalize sensor values:  Value - MIN / MAX - MIN
@@ -124,12 +138,18 @@ class Controller(Robot):
             #left_force = left_sensor_value / (4095/6.28)
 
         else:
-            left_force = 0
+            left_force = 2
+            
+        if left_force < right_force:
+            left_force = left_force * -1
+        elif left_force > right_force:
+            right_force = right_force * -1
+            
         return left_force, right_force
 
     def read_values(self):
         # Get the distance sensor values (front ones only)
-        ps0_value = self.ps0.getValue()       
+        ps0_value = self.ps0.getValue()      
         ps1_value = self.ps1.getValue()
         ps2_value = self.ps2.getValue()
         ps5_value = self.ps5.getValue()
