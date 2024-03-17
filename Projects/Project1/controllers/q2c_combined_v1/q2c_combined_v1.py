@@ -2,6 +2,7 @@ from controller import Robot
 import math
 
 MAX_SPEED = 6.28
+# Goal as specified on the map
 GOAL = [0.35471, 0.35471]
 
 class Controller(Robot):
@@ -39,8 +40,7 @@ class Controller(Robot):
         self.right_motor.setVelocity(0.0)
 
     def combine_APF(self, ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value, gps_values):
-        rep_coeff_l = 1
-        rep_coeff_r = 1
+        # Coefficients to adjust the strength of the attractive force
         att_coeff_l = 1
         att_coeff_r = 1
 
@@ -48,20 +48,20 @@ class Controller(Robot):
         att_force_left, att_force_right = self.goal_APF(gps_values)
         rep_force_left, rep_force_right = self.obstacles_APF(ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value)
 
+        # If the attractive forces are zero, then the goal has been reached
         if att_force_left == 0 and att_force_right == 0:
             return att_force_left, att_force_right
-          
+        
+        # If an obstacle is detected, it takes priority over the attraction  
         if rep_force_left != 0 and att_force_left != 0:
             att_coeff_l = 0.05
         if rep_force_right != 0 and att_force_right != 0:
             att_coeff_r = 0.05
 
-        print(f'rep_L = {rep_force_left} rep_R = {rep_force_right}')
-        print(f'att_L = {att_force_left} att_R = {att_force_right}')
-        print("---------------------------")
-        # Compute Net Force by summing them:
-        final_left_force = att_force_left * att_coeff_l + rep_force_left * rep_coeff_l
-        final_right_force = att_force_right * att_coeff_r + rep_force_right * rep_coeff_r
+        # Compute Net Force by summing them while using coefficient weights
+        final_left_force = (att_force_left * att_coeff_l) + rep_force_left
+        final_right_force = (att_force_right * att_coeff_r) + rep_force_right
+        
         #return rep_force_left, rep_force_right
         return final_left_force, final_right_force
     
@@ -69,7 +69,6 @@ class Controller(Robot):
     def goal_APF(self, gps_values):
         # Compute the distance between robot and goal
         dist = math.sqrt( pow(gps_values[0] - GOAL[0], 2) + pow(gps_values[1] - GOAL[1],2))
-        
         # Calculate the angle between the current orientation and the direction to the goal
         angle_to_goal = math.atan2(GOAL[1] - gps_values[1], GOAL[0] - gps_values[0])
         # Get the current velocity vector
@@ -80,8 +79,8 @@ class Controller(Robot):
         angle_difference = angle_to_goal - current_angle
         # Use proportional control to adjust the velocities
         angular_velocity = 6 * angle_difference
-        # Calculate the adjusted velocities
         
+        # Calculate the adjusted velocities
         left_force = MAX_SPEED - angular_velocity
         right_force = MAX_SPEED + angular_velocity
        
@@ -95,8 +94,7 @@ class Controller(Robot):
             right_force = -MAX_SPEED
 
         # Set the adjusted velocities
-        print(f'dist = {dist}')
-        #if (math.fabs(dist - 0.01) < 0.01):
+        # If the distance is within 0.14 m
         if dist < 0.14:
             left_force = 0
             right_force = 0
@@ -107,44 +105,39 @@ class Controller(Robot):
 
     def obstacles_APF(self, ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value):
 
-        print(f"ps0_value: {ps0_value}")
-        print(f"ps1_value: {ps1_value}")
-        print(f"ps2_value: {ps2_value}")
-        print(f"ps5_value: {ps5_value}")
-        print(f"ps6_value: {ps6_value}")
-        print(f"ps7_value: {ps7_value}")
-        print("---------------------------------------------------------")
-        
+        # Set the sensor value and speed max and min values        
         MAX_SV = 4095
         MIN_SV = 34
         MAX_SP = 6.28
         MIN_SP = 3.14
+        
         #RIGHT SIDE OF ROBOT
         if (ps0_value > 80 or ps1_value > 100 or ps2_value > 120) :
+            # Normalize sensor values:  Value - MIN / MAX - MIN
             right_sensor_value = (max(ps0_value, ps1_value, ps2_value) - MIN_SV) / (MAX_SV - MIN_SV)
             # Map sensor values to speed values: MIN + (norm_sensor * (MAX - MIN))
             right_force = (MIN_SP + (right_sensor_value * (MAX_SP - MIN_SP)))
-            #right_force = right_sensor_value / (4095/6.28)
-            #right_force = (max(ps0_value, ps1_value, ps2_value) / (4095/6.28))
         else:
+            # Our adjusted minimum speed when no obstacles are detected
             right_force = 2
+            
         #LEFT SIDE OF ROBOT
         if (ps7_value > 80 or ps6_value > 100 or ps5_value > 120) :
-                    # Normalize sensor values:  Value - MIN / MAX - MIN
+            # Normalize sensor values:  Value - MIN / MAX - MIN
             left_sensor_value = (max(ps7_value, ps6_value, ps5_value) - MIN_SV) / (MAX_SV - MIN_SV)
             # Map sensor values to speed values: MIN + (norm_sensor * (MAX - MIN))
             left_force = (MIN_SP + (left_sensor_value * (MAX_SP - MIN_SP)))
-            #left_force = (max(ps7_value, ps6_value, ps5_value) / (4095/6.28))
-            #left_force = left_sensor_value / (4095/6.28)
-
         else:
+            # Our adjusted minimum speed when no obstacles are detected
             left_force = 2
-            
+        
+        # Adjust which wheels are counterclockwise according to where the robot turns    
         if left_force < right_force:
             left_force = left_force * -1
         elif left_force > right_force:
             right_force = right_force * -1
-            
+        
+        # Return the left and right resultant forces    
         return left_force, right_force
 
     def read_values(self):
@@ -165,10 +158,11 @@ class Controller(Robot):
         self.pen.write(True)
 
         while self.step(self.timeStep) != -1:
+            # Read the sensor values
             ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value, gps_values = self.read_values()
+            # Compute the resultant force using APF models
             left_velocity, right_velocity = self.combine_APF(ps0_value, ps1_value, ps2_value, ps5_value, ps6_value, ps7_value, gps_values)
-            # left_velocity = left_velocity**2
-            # right_velocity = right_velocity**2         
+            # Re-adjust the velocities      
             if left_velocity > MAX_SPEED:
                 left_velocity = MAX_SPEED
             if right_velocity > MAX_SPEED:
@@ -177,8 +171,7 @@ class Controller(Robot):
                 left_velocity = -MAX_SPEED
             if right_velocity < -MAX_SPEED:
                 right_velocity = -MAX_SPEED
-
-            
+            # Set the velocities
             self.left_motor.setVelocity(left_velocity)
             self.right_motor.setVelocity(right_velocity)
 
