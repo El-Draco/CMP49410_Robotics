@@ -20,8 +20,16 @@ from controller import Robot
 import math
 
 MAX_SPEED = 6.28
+RANGE = (1024 / 2)
 GOAL = [-0.35471, -0.35471]
-
+braitenberg_coefficients = [[0.942, -0.22],
+                            [0.63, -0.1], 
+                            [0.5, -0.06], 
+                            [-0.06, -0.06], 
+                            [-0.06, -0.06], 
+                            [-0.06, 0.5], 
+                            [-0.19, 0.63], 
+                            [-0.13, 0.942]]
 class Controller(Robot):
     SPEED = 6
     timeStep = 64
@@ -30,11 +38,13 @@ class Controller(Robot):
         super(Controller, self).__init__()
 
         self.ps0 = self.getDevice('ps0')
-        self.ps7 = self.getDevice('ps7')
         self.ps1 = self.getDevice('ps1')
-        self.ps6 = self.getDevice('ps6')
         self.ps2 = self.getDevice('ps2')
+        self.ps3 = self.getDevice('ps3')
+        self.ps4 = self.getDevice('ps4')
         self.ps5 = self.getDevice('ps5')
+        self.ps6 = self.getDevice('ps6')
+        self.ps7 = self.getDevice('ps7')
         
         self.pen = self.getDevice('pen')
         self.ps0.enable(self.timeStep)
@@ -43,6 +53,9 @@ class Controller(Robot):
         self.ps6.enable(self.timeStep)
         self.ps2.enable(self.timeStep)
         self.ps5.enable(self.timeStep)
+        self.ps3.enable(self.timeStep)
+        self.ps4.enable(self.timeStep)
+        
         
         
 
@@ -105,20 +118,24 @@ class Controller(Robot):
         self.right_motor.setVelocity(right_velocity)
 
     def avoid_barrels(self):
-        ps0_value = self.ps0.getValue()        
-        ps7_value = self.ps7.getValue()
-        ps1_value = self.ps1.getValue()
-        ps6_value = self.ps6.getValue()
-        ps2_value = self.ps2.getValue()
-        ps5_value = self.ps5.getValue()
+        ps0_value = (self.ps0.getValue() - MIN_SV) / (MAX_SV - MIN_SV)   
+        ps7_value = (self.ps7.getValue() - MIN_SV) / (MAX_SV - MIN_SV) 
+        ps1_value = (self.ps1.getValue() - MIN_SV) / (MAX_SV - MIN_SV)
+        ps6_value = (self.ps6.getValue() - MIN_SV) / (MAX_SV - MIN_SV)
+        ps2_value = (self.ps2.getValue() - MIN_SV) / (MAX_SV - MIN_SV)
+        ps5_value = (self.ps5.getValue() - MIN_SV) / (MAX_SV - MIN_SV)
         
         MAX_SV = 4095
-        MIN_SV = 34
+        MIN_SV = 80
         MAX_SP = 6.28
         MIN_SP = 3.14
         
-        print(f'left_reading = {ps7_value} and right_reading = {ps0_value}')
+        # print(f'left_reading = {ps7_value} and right_reading = {ps0_value}')
 
+    
+        left_force = 0
+        right_force = 0
+        
         #RIGHT SIDE OF ROBOT
         if (ps0_value > MIN_SV or ps1_value > MIN_SV or ps2_value > MIN_SV) :
             # Normalize sensor values:  Value - MIN / MAX - MIN
@@ -135,11 +152,20 @@ class Controller(Robot):
             left_force = (MIN_SP + (left_sensor_value * (MAX_SP - MIN_SP)))
         else:
             left_force = MIN_SP
-            
-        print(f'left_force = {left_force} and right_force = {right_force}')
-        print("---------------------------------------------------------")
+        
+        # sensor_values = [getattr(self, f"ps{i}").getValue() for i in range(8)]
 
+        # speed = [0.0, 0.0]
+        # for i in range(2):
+        #     speed[i] = 0.0
+        #     for j in range(8):
+        #         speed[i] += braitenberg_coefficients[j][i] * (1.0 - (sensor_values[j] / RANGE))
+
+            
+        # print(f'left_force = {speed[0]} and right_force = {speed[1]}')
+        print("---------------------------------------------------------")
         return left_force, right_force
+        # return speed[0], speed[1]
 
     def run(self):
         print("Press 'G' to read the GPS device's position")

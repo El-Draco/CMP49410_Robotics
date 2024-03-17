@@ -33,12 +33,16 @@ class Controller(Robot):
         self.ps7 = self.getDevice('ps7')
         self.ps1 = self.getDevice('ps1')
         self.ps6 = self.getDevice('ps6')
+        self.ps5 = self.getDevice('ps5')
+        self.ps2 = self.getDevice('ps2')
         
         self.pen = self.getDevice('pen')
         self.ps0.enable(self.timeStep)
         self.ps7.enable(self.timeStep)
         self.ps1.enable(self.timeStep)
         self.ps6.enable(self.timeStep)
+        self.ps5.enable(self.timeStep)
+        self.ps2.enable(self.timeStep)
         
 
         self.gps = self.getDevice('gps')
@@ -100,21 +104,31 @@ class Controller(Robot):
         self.right_motor.setVelocity(right_velocity)
 
     def avoid_barrels(self):
-        ps0_value = self.ps0.getValue()        
-        ps7_value = self.ps7.getValue()
+        ps0_value = self.ps0.getValue()       
         ps1_value = self.ps1.getValue()
+        ps2_value = self.ps2.getValue()
+        ps5_value = self.ps5.getValue()
         ps6_value = self.ps6.getValue()
+        ps7_value = self.ps7.getValue()
         
-        print(f'left_velocity = {ps0_value} and right velocity = {ps7_value}')
-
+        
+        print(f"ps0_value: {ps0_value}")
+        print(f"ps1_value: {ps1_value}")
+        print(f"ps2_value: {ps2_value}")
+        print(f"ps5_value: {ps5_value}")
+        print(f"ps6_value: {ps6_value}")
+        print(f"ps7_value: {ps7_value}")
+        print("---------------------------------------------------------")
+        
+        # print(f'left_sensor = {ps5_value} and right sensor = {ps2_value}')
         #RIGHT SIDE OF ROBOT
-        if (ps0_value > 80 or ps1_value > 80) :
-            right_force = (max(ps0_value, ps1_value) / (4095/6.28))
+        if (ps0_value > 80 or ps1_value > 100 or ps2_value > 120) :
+            right_force = (max(ps0_value, ps1_value, ps2_value) / (4095/6.28))
         else:
             right_force = 3
         #LEFT SIDE OF ROBOT
-        if (ps7_value > 80 or ps6_value > 80) :
-            left_force = (max(ps7_value, ps6_value) / (4095/6.28))
+        if (ps7_value > 80 or ps6_value > 100 or ps5_value > 120) :
+            left_force = (max(ps7_value, ps6_value, ps5_value) / (4095/6.28))
         else:
             left_force = 3
         return right_force, left_force
